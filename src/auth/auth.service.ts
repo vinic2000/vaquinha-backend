@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './../prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Auth } from './entities/auth';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuthService {
     });
 
     if (!user) {
-      return;
+      throw new UnauthorizedException('E-mail or password invalid');
     }
 
     const { password, ...rest } = user;
