@@ -11,6 +11,11 @@ export class AuthService {
   ) {}
 
   async authenticate({ email, password: pass }: Auth) {
+
+    if(email === undefined && pass === undefined){
+      throw new UnauthorizedException('E-mail or password invalid');
+    }
+
     const user = await this.prisma.user.findFirst({
       where: {
         email: email,

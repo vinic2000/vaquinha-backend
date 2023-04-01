@@ -1,5 +1,3 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from './../prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';

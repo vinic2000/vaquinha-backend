@@ -1,8 +1,7 @@
 import { CreateVaquinhaDto } from './dto/create-vaquinha.dto';
 import { PrismaService } from './../prisma.service';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import Vaquinha from './entities/vaquinha';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class VaquinhasService {

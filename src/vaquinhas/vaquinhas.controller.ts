@@ -9,7 +9,7 @@ export class VaquinhasController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async add(@Body() data: CreateVaquinhaDto) {
+  async create(@Body() data: CreateVaquinhaDto) {
     return await this.vaquinhasService.create(data);
   }
 
