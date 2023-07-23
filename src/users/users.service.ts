@@ -68,4 +68,14 @@ export class UsersService {
 
     return this.prisma.user.delete({ where: { id: id } });
   }
+
+
+  async remember(email: string) {
+
+    return await this.prisma.user.findFirst({
+      where: {
+        email: email
+      }
+    })
+  }
 }

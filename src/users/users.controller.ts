@@ -15,11 +15,18 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('/esqueci-senha')
+  async remember(@Body() email: string) {
+
+    return this.usersService.remember(email)
+
   }
 
   @UseGuards(JwtAuthGuard)
