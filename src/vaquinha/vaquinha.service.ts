@@ -89,10 +89,24 @@ export class VaquinhaService {
   }
 
   async deleteVaquinha(id: string): Promise<messageType> {
-    const data = await this.vaquinhaModel.findById(id);
+    const data = await this.find(id);
     VaquinhaService.verifyVaquinhaExist(data);
     await this.vaquinhaModel.findByIdAndDelete(id);
     return { message: 'Vaquinha deleted' };
+  }
+
+  async alterVaquinha(id: string, data: Vaquinha): Promise<Vaquinha> {
+    const vaquinha = await this.find(id);
+    VaquinhaService.verifyVaquinhaExist(vaquinha);
+
+    const { name, totalValue, description } = data;
+    await this.vaquinhaModel.findByIdAndUpdate(id, {
+      name,
+      totalValue,
+      description,
+    });
+
+    return await this.find(id);
   }
 
   private static verifyVaquinhaExist(vaquinha: Vaquinha): void {
