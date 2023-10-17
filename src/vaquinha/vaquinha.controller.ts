@@ -1,4 +1,12 @@
-import { Controller, Body, Post, Param, Put, Get } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  Param,
+  Put,
+  Get,
+  Delete,
+} from '@nestjs/common';
 import { VaquinhaService } from './vaquinha.service';
 import { Vaquinha } from './schema/vaquinha.schema';
 
@@ -20,7 +28,7 @@ export class VaquinhaController {
   }
 
   @Put('addmembrer/:id')
-  async findByiD(@Param() param, @Body() body) {
+  async addMember(@Param() param, @Body() body) {
     const { id } = param;
     const { member } = body;
 
@@ -35,6 +43,20 @@ export class VaquinhaController {
 
     const data = await this.vaquinhaService.removeMember(id, member);
 
+    return data;
+  }
+
+  @Delete(':id')
+  async deleteVaquinha(@Param() param) {
+    const { id } = param;
+    const data = await this.vaquinhaService.deleteVaquinha(id);
+    return data;
+  }
+
+  @Put(':id')
+  async alterVaquinha(@Param() param, @Body() body: Vaquinha) {
+    const { id } = param;
+    const data = await this.vaquinhaService.alterVaquinha(id, body);
     return data;
   }
 }
