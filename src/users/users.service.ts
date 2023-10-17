@@ -1,81 +1,28 @@
-import { PrismaService } from './../prisma.service';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from './schema/users.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const userExist = await this.prisma.user.findFirst({
-      where: {
-        email: createUserDto.email,
-      },
-    });
-
-    if (userExist) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+  async create(props: User) {
+    try {
+      const data = await this.UserModel.create(props);
+      return data;
+    } catch (error) {
+      console.log('Erro ao salvar dados');
     }
-
-    return this.prisma.user.create({ data: createUserDto });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
-  }
-
-  async findOne(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id: id } });
-
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+  async findById(id: string) {
+    try {
+      const data = await this.UserModel.findById(id);
+      return data;
+    } catch (error) {
+      console.log(error);
+      console.log('Erro ao salvar dados');
     }
-
-    return user;
-  }
-
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const userExist = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!userExist) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-    }
-
-    return this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: updateUserDto,
-    });
-  }
-
-  async remove(id: string) {
-    const userExist = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!userExist) {
-      throw new HttpException('User don´t exist', HttpStatus.BAD_REQUEST);
-    }
-
-    return this.prisma.user.delete({ where: { id: id } });
-  }
-
-
-  async remember(email: string) {
-
-    return await this.prisma.user.findFirst({
-      where: {
-        email: email
-      }
-    })
   }
 }
